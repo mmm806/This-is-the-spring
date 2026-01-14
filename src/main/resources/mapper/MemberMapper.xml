@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.thisisthespring.domain.user.mapper.MemberMapper">
+
+    <!-- 컬럼/테이블명은 실제 DB에 맞게 수정하세요 -->
+    <resultMap id="MemberResultMap" type="com.example.thisisthespring.domain.user.entity.Member">
+        <id     column="id"    property="id"/>
+        <result column="email" property="email"/>
+        <result column="name"  property="name"/>
+        <result column="age"   property="age"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="MemberResultMap">
+        SELECT id, email, name, age
+        FROM member
+    </select>
+
+    <select id="selectById" parameterType="long" resultMap="MemberResultMap">
+        SELECT id, email, name, age
+        FROM member
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByEmail" parameterType="string" resultMap="MemberResultMap">
+        SELECT id, email, name, age
+        FROM member
+        WHERE email = #{email}
+    </select>
+
+    <select id="selectAllOrderByAgeAsc" resultMap="MemberResultMap">
+        SELECT id, email, name, age
+        FROM member
+        ORDER BY age ASC
+    </select>
+
+    <!-- 주의: 컬럼명/정렬방향을 파라미터로 받는 ORDER BY는 SQL Injection 위험이 있어 별도 방어가 필요 -->
+    <select id="selectAllOrderBy" resultMap="MemberResultMap">
+        SELECT id, email, name, age
+        FROM member
+        ORDER BY
+        ${order} ${dir}
+    </select>
+
+    <select id="selectByNameLike" resultMap="MemberResultMap">
+        SELECT id, email, name, age
+        FROM member
+        WHERE name LIKE CONCAT('%', #{name}, '%')
+    </select>
+
+    <select id="selectAllCount" resultType="int">
+        SELECT COUNT(*)
+        FROM member
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="member.id">
+        INSERT INTO member (email, name, age)
+        VALUES (#{member.email}, #{member.name}, #{member.age})
+    </insert>
+
+    <update id="update">
+        UPDATE member
+        SET
+        email = #{member.email},
+        name  = #{member.name},
+        age   = #{member.age}
+        WHERE id = #{member.id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM member
+        WHERE id = #{member.id}
+    </delete>
+
+    <delete id="deleteById">
+        DELETE FROM member
+        WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE FROM member
+    </delete>
+
+</mapper>
