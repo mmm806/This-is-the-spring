@@ -1,0 +1,36 @@
+package com.example.thisisthespring;
+
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+import com.example.thisisthespring.domain.product.entity.Product;
+import com.example.thisisthespring.domain.product.repository.ProductQueryDslRepository;
+import com.example.thisisthespring.domain.product.repository.ProductRepository;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class QueryDslApplication implements ApplicationRunner {
+	private final ProductRepository repository;
+
+	@Override
+	public void run(ApplicationArguments args) throws Exception {
+		var product1 = Product.builder().title("갤럭시 와치").description("삼성의 스마트 와치").build();
+		var product2 = Product.builder().title("애플 와치").description("애플의 스마트 와치").build();
+		var product3 = Product.builder().title("샤오미 와치").description("샤오미의 스마트 와치").build();
+		var product4 = Product.builder().title("캠퍼스 와치").description("캠퍼스의 스마트 와치").build();
+		var products = List.of(product1, product2, product3, product4);
+		repository.saveAll(products);
+
+		var result = repository.queryByKeyword("캠퍼스", ProductQueryDslRepository.SearchType.BOTH, 0, 10);
+		log.info("result: {}", result);
+		repository.deleteAll();
+	}
+}
+
