@@ -2,6 +2,13 @@ spring:
   profiles:
     active: h2
 
+  mongodb:
+    uri: mongodb://localhost:27017/lecture   # Boot 4 연결 설정
+
+  data:
+    mongodb:
+      auto-index-creation: true              # 인덱스 자동 생성 (Spring Data)
+
 mybatis:
   mapper-locations: classpath*:/mapper/**/*.xml
   type-aliases-package: com.example.thisisthespring.domain.user.entity
