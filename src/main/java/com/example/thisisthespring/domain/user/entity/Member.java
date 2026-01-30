@@ -33,6 +33,8 @@ public class Member {
 	private String name;
 	private String email;
 	private Integer age;
+	private String password;
+	private Boolean enabled;
 
 	@JsonIgnore
 	@ToString.Exclude
